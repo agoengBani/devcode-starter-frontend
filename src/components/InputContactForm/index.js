@@ -8,6 +8,30 @@ const InputContactForm = (props) => {
    const [phoneNumber, setPhoneNumber] = useState("");
    const [email, setEmail] = useState("");
 
+   // TODO: Uncomment baris kode di bawah untuk membuat regex yang akan membantu memvalidasi format nomor telepon dan email
+   const regexPhoneNumber = /^[0-9]*$/;
+   const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+   // TODO:
+   // 1. Buat sebuah fungsi yang akan memvalidasi apakah format dari nomor telepon dan email yang dimasukkan sudah benar atau belum
+   // 2. Jika format nomor telepon salah, maka tampilkan sebuah alert dengan isi pesan "Nomor telepon hanya dapat berupa angka."
+   // 3. Jika format email salah, maka tampilkan sebuah alert dengan isi pesan "Format email tidak sesuai."
+   // 4. Jika format nomor telepon dan email sudah benar, maka lanjutkan proses untuk membuat kontak baru atau meng-update kontak
+
+   const validate = () => {
+      let isValid = true;
+      if (!regexPhoneNumber.test(phoneNumber)) {
+         alert("Nomor telepon hanya dapat berupa angka.");
+         isValid = false;
+      }
+      if (!regexEmail.test(email)) {
+         alert("Format email tidak sesuai.");
+         isValid = false;
+      }
+
+      return isValid;
+   };
+
    // TODO:
    // 1. Buat metode untuk dispatch fungsi ubah data kontak yang sudah dibuat sebelumnya di service/index.js di dalam fungsi handleSubmit
    // 2. Pada fungsi handleSubmit, buat percabangan dengan kondisi ketika nilai dari id lebih dari 0, maka jalankan fungsi ubah data kontak dan untuk sebaliknya, maka jalankan fungsi untuk tambah kontak baru
@@ -15,20 +39,22 @@ const InputContactForm = (props) => {
    const { handleGetContacts, selectedContact } = props;
 
    const handleSubmit = async () => {
-      if (id) {
-         await updateContact({
-            id,
-            data: { full_name: fullName, phone_number: phoneNumber, email },
-         });
-      } else {
-         await addNewContact({
-            full_name: fullName,
-            phone_number: phoneNumber,
-            email,
-         });
+      if (validate()) {
+         if (id) {
+            await updateContact({
+               id,
+               data: { full_name: fullName, phone_number: phoneNumber, email },
+            });
+         } else {
+            await addNewContact({
+               full_name: fullName,
+               phone_number: phoneNumber,
+               email,
+            });
+         }
+         handleGetContacts();
+         resetInputValue();
       }
-      handleGetContacts();
-      resetInputValue();
    };
 
    const resetInputValue = () => {
