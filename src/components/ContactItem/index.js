@@ -1,4 +1,4 @@
-import { deleteContact, updateContact } from "../../services";
+import { deleteContact } from "../../services";
 import "./style.css";
 
 const ContactItem = (props) => {
