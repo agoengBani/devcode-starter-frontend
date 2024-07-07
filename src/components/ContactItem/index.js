@@ -40,8 +40,6 @@ const ContactItem = (props) => {
                >
                   Edit
                </button>
-            </div>
-            <div className="contact-item__button-wrapper">
                <button
                   data-cy="btn-delete"
                   className="contact-item__button contact-item__delete-button"
