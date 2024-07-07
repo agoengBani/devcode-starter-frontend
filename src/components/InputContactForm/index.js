@@ -1,37 +1,54 @@
-import { useState } from "react";
-
-// TODO: Uncomment baris kode di bawah untuk meng-import fungsi addNewContact dari services/index.js
-import { addNewContact } from "../../services";
-
+import { useEffect, useState } from "react";
+import { addNewContact, updateContact } from "../../services";
 import "./style.css";
 
 const InputContactForm = (props) => {
+   const [id, setId] = useState(0);
    const [fullName, setFullName] = useState("");
    const [phoneNumber, setPhoneNumber] = useState("");
    const [email, setEmail] = useState("");
 
-   // TODO: Uncomment baris kode di bawah untuk mendapatkan fungsi handleGetContacts dari props
-   const { handleGetContacts } = props;
+   // TODO:
+   // 1. Buat metode untuk dispatch fungsi ubah data kontak yang sudah dibuat sebelumnya di service/index.js di dalam fungsi handleSubmit
+   // 2. Pada fungsi handleSubmit, buat percabangan dengan kondisi ketika nilai dari id lebih dari 0, maka jalankan fungsi ubah data kontak dan untuk sebaliknya, maka jalankan fungsi untuk tambah kontak baru
+
+   const { handleGetContacts, selectedContact } = props;
+
+   const handleSubmit = async () => {
+      if (id) {
+         await updateContact({
+            id,
+            data: { full_name: fullName, phone_number: phoneNumber, email },
+         });
+      } else {
+         await addNewContact({
+            full_name: fullName,
+            phone_number: phoneNumber,
+            email,
+         });
+      }
+      handleGetContacts();
+      resetInputValue();
+   };
 
    const resetInputValue = () => {
+      setId(0);
       setFullName("");
       setPhoneNumber("");
       setEmail("");
    };
 
-   // TODO: Uncomment baris kode di bawah untuk memanggil fungsi mengirim data kontak baru yang sudah diimport sebelumnya dari services/index.js lalu panggil fungsi untuk mengambil semua data kontak dari api dan mereset value yang ada di setiap input field
-   const handleSubmit = async () => {
-      await addNewContact({
-         full_name: fullName,
-         phone_number: phoneNumber,
-         email,
-      });
-
-      handleGetContacts();
-      resetInputValue();
-   };
-
    const allowSubmit = !(!fullName || !phoneNumber || !email);
+
+   // TODO: Uncomment baris kode di bawah untuk mengisi input field dengan data kontak yang akan diubah ketika value dari selectedContact berubah
+   useEffect(() => {
+      setId(selectedContact?.id);
+      setFullName(selectedContact?.fullName ? selectedContact.fullName : "");
+      setPhoneNumber(
+         selectedContact?.phoneNumber ? selectedContact?.phoneNumber : ""
+      );
+      setEmail(selectedContact?.email ? selectedContact.email : "");
+   }, [selectedContact]);
 
    return (
       <div className="input-contact__form-container">
@@ -70,7 +87,11 @@ const InputContactForm = (props) => {
                   placeholder="Masukkan Email"
                />
             </div>
-            <button disabled={!allowSubmit} data-cy="btn-submit">
+            <button
+               disabled={!allowSubmit}
+               data-cy="btn-submit"
+               onClick={handleSubmit}
+            >
                Simpan
             </button>
          </div>
