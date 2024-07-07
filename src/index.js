@@ -4,33 +4,30 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
-// TODO: Uncomment baris kode dibawah ini untuk meng-import Halaman Hello ke dalam router
 import Hello from "./routes/hello";
 import Home from "./routes/home";
 import ContactManager from "./routes/contacts";
 
 const router = createBrowserRouter([
-   {
-      path: "/",
-      element: <Home />,
-   },
-
-   {
-      path: "/hello",
-      element: <Hello />,
-   },
-
-   {
-      path: "/contacts",
-      element: <ContactManager />,
-   },
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/hello",
+    element: <Hello />,
+  },
+  {
+    path: "/contacts",
+    element: <ContactManager />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-   <React.StrictMode>
-      <RouterProvider router={router} className="app" />
-   </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} className="app" />
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
